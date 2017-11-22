@@ -1,0 +1,11 @@
+{% raw -%}
+- name: ship jenkins-debian-glue installation script
+  copy:
+      src: "files/install_jenkins_debian_glue.sh"
+      dest: "~ubuntu/"
+      mode: "0777"
+
+- name: install jenkins-debian-glue
+  shell: ~ubuntu/install_jenkins_debian_glue.sh 1sw-root
+  become: yes
+{%- endraw %}

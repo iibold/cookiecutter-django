@@ -1,0 +1,24 @@
+{% raw -%}
+---
+# Handler to handle common notifications. Handlers are called by other plays.
+# See http://docs.ansible.com/playbooks_intro.html for more information about handlers.
+
+- name: update apt
+  become: yes
+  apt: update_cache=yes
+
+- name: restart ntp
+  service: name=ntp state=restarted enabled=yes
+
+- name: restart iptables
+  service: name=iptables state=restarted
+
+- name: increase_swap
+  become: yes
+  shell: ~/increase_swap.sh
+
+- name: install docker 
+  become: yes 
+  shell: ~/install_docker.sh 
+
+{%- endraw %}

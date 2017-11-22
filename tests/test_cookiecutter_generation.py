@@ -11,16 +11,46 @@ RE_OBJ = re.compile(PATTERN)
 
 @pytest.fixture
 def context():
+
     return {
-        'project_name': 'My Test Project',
+        'project_name': 'iibold',
         'project_slug': 'my_test_project',
         'author_name': 'Test Author',
         'email': 'test@example.com',
         'description': 'A short description of the project.',
-        'domain_name': 'example.com',
-        'version': '0.1.0',
-        'timezone': 'UTC',
+        'domain_name': 'iibold.com',
+        "application_name": "iibold",
+        "application_slug": "iibold",
+        "application_user": "hack",
+        "application_root": "/hack/iibold",
+        "staging_server_domain": "staging.iibold.com",
+        "production_server_domain": "iibold.com",
+        "add_your_public_key": "y",
+        "add_letsencrypt_certificate": "n",
+        "letsencrypt_email": "support@production_server_domain",
+        "project_git_remote": "git@github.com:iibold/cookiecutter-django-ansible.git",
+        "author_name": "cason wang",
+        "domain_name": "iibold.com",
+        "version": "0.1.0",
+        "timezone": "Asia/Shanghai",
+        "use_whitenoise": "n",
+        "use_celery": "n",
+        "use_mailhog": "y",
+        "use_sentry_for_error_reporting": "y",
+        "use_opbeat": "n",
+        "use_pycharm": "n",
+        "private_network": "192.168.13.38",
+        "windows": "n",
+        "use_docker": "n",
+        "use_heroku": "n",
+        "use_elasticbeanstalk_experimental": "n",
+        "use_compressor": "n",
+        "postgresql_version": "9.6",
+        "js_task_runner": "Gulp",
+        "custom_bootstrap_compilation": "n",
+        "open_source_license": "Not open source"
     }
+
 
 
 def build_files_list(root_dir):

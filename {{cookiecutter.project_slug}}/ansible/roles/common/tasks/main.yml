@@ -1,0 +1,71 @@
+{% raw -%}
+---
+# This playbook contains common plays that will be run on all nodes.
+
+
+
+- name: Update the source for apt
+  copy:
+      src: "files/apt_source.txt"
+      dest: "/etc/apt/sources.list"
+  notify: update apt
+
+- name: create deply user
+  user: name=deploy group=ubuntu
+
+- name: update apt-get
+  become: yes
+  shell: apt-get update ; true
+
+- name: Install ntp
+  apt: name=ntp state=present
+  tags: ntp
+  notify: restart ntp
+
+- name: Start the ntp service
+  service: name=ntp state=started enabled=yes  #note: ubuntu the service name is ntp, not ntpd.
+  tags: ntp
+
+- name: Install System Packages
+  become: yes
+  apt: pkg={{ item }} state=latest  # item comes from with_items
+  with_items:
+    - curl
+    - wget
+    - python-software-properties
+    - build-essential
+    - htop
+    - git
+    - libpq-dev
+    - python-virtualenv
+    - python3-dev
+    - python3-pip
+  tags: packages
+
+- pip: name=setuptools
+
+- name: Set the motd
+  copy: src=files/motd.txt dest=/etc/motd  # a warning to 
+
+- name: Configure the timezone
+  become: yes
+  template: src=timezone.tpl dest=/etc/timezone
+
+- name: More Configure the timezone
+  become: yes
+  file: src=/usr/share/zoneinfo/{{timezone}} dest=/etc/localtime state=link force=yes backup=yes
+
+- name: Add UTF8 Language Pack
+  shell: locale-gen en_GB.UTF-8
+  become: yes
+
+- name: Increase swap
+  copy:
+    src: "files/increase_swap.sh"
+    dest: "~/"
+    mode: "0777"
+  notify: increase_swap
+  
+{%- endraw %}
+
+

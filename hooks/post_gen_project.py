@@ -203,6 +203,77 @@ def remove_open_source_files():
         ))
 
 
+def remove_not_needed_nginx_config_file(project_location):
+    """
+    Remove https file if it is http,
+    Remove http file if it is https.
+    """
+
+    if '{{ cookiecutter.add_letsencrypt_certificate }}'.lower() == 'y':
+        # Remove celery upstart job if celery not needed
+        http_file_location = os.path.join(
+            project_location,
+            'ansible/roles/app/templates/nginx_http_config.j2'
+        )
+
+        os.remove(http_file_location)
+
+    else:
+        https_file_location = os.path.join(
+            project_location,
+            'ansible/roles/app/templates/nginx_https_config.j2'
+        )
+
+        os.remove(https_file_location)
+
+def postgres_set_password(project_location):
+    """
+    Set password for postgree db.
+    """
+
+    settings_content = ''
+    settings_file_name = os.path.join(project_location, 'ansible/ansible_vars/base.yml')
+
+    with open(settings_file_name, 'r') as f:
+        # Read the file content
+        settings_content = f.read()
+
+    with open(settings_file_name, 'w') as f:
+        # Empty the file, replace the password, end write the content again.
+        postgres_password = get_random_string(length=20)
+        settings_content = settings_content.replace('POSTGRES_PASSWORD!!!', postgres_password, 1)
+
+        f.write(settings_content)
+
+def set_personal_public_key():
+    app_user_keys = 'ansible/ansible_vars/public_keys/app_user_keys'
+    root_user_keys = 'ansible/ansible_vars/public_keys/root_user_keys'
+
+    with open(os.path.expanduser('~/.ssh/id_rsa.pub'), 'r') as f:
+        publick_key = f.read()
+
+    with open(app_user_keys, 'w') as f:
+        f.write(publick_key)
+
+    with open(root_user_keys, 'w') as f:
+        f.write(publick_key)
+
+
+def remove_celery_ansible_role(project_location):
+    """
+    # Remove celery upstart job if celery not need 
+    # it is actually not needed   
+    """
+
+    celery_role_location = os.path.join(
+        project_location,
+        'ansible/roles/celery'
+    )
+
+    shutil.rmtree(celery_role_location)
+
+
+
 # IN PROGRESS
 # def copy_doc_files(project_directory):
 #     cookiecutters_dir = DEFAULT_CONFIG['cookiecutters_dir']
@@ -227,6 +298,7 @@ make_secret_key(PROJECT_DIRECTORY)
 # Removes the taskapp if celery isn't going to be used
 if '{{ cookiecutter.use_celery }}'.lower() == 'n':
     remove_task_app(PROJECT_DIRECTORY)
+    remove_celery_ansible_role(PROJECT_DIRECTORY)
 
 # Removes the .idea directory if PyCharm isn't going to be used
 if '{{ cookiecutter.use_pycharm }}'.lower() != 'y':
@@ -271,3 +343,10 @@ if '{{ cookiecutter.use_elasticbeanstalk_experimental }}'.lower() != 'y':
 # Remove files conventional to opensource projects only.
 if '{{ cookiecutter.open_source_license }}' == 'Not open source':
     remove_open_source_files()
+
+if '{{ cookiecutter.add_your_public_key }}'.lower() == 'y':
+    set_personal_public_key()
+
+postgres_set_password(PROJECT_DIRECTORY)
+
+remove_not_needed_nginx_config_file(PROJECT_DIRECTORY)

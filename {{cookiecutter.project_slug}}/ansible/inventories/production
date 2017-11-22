@@ -1,0 +1,8 @@
+[all:vars]
+env=production
+
+[webservers]
+{{ cookiecutter.production_server_domain }}
+
+[dbservers]
+{{ cookiecutter.production_server_domain }}

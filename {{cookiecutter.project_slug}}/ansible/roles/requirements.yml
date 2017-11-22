@@ -1,0 +1,7 @@
+- src: ANXS.postgresql
+{% if cookiecutter.add_letsencrypt_certificate -%}
+- src: thefinn93.letsencrypt 
+{%- endif %}
+- src: carlosbuenosvinos.ansistrano-deploy
+- src: carlosbuenosvinos.ansistrano-rollback
+# this file is to configure the ansible-galaxy to get the proper roles.

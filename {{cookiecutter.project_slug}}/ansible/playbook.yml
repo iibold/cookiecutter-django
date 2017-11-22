@@ -1,0 +1,10 @@
+---
+- name: apply common configuration to all nodes
+  hosts: {{ cookiecutter.project_slug }}
+  become: True
+  roles:
+    - common
+    #- app
+  vars:
+    servername: {{ cookiecutter.project_slug }}
+    timezone:  {{ cookiecutter.timezone }}
