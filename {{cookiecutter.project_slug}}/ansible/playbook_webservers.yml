@@ -11,9 +11,9 @@
     - ansible_vars/{{ env }}.yml
 
   roles:
-    - nginx
-    - base
-    - application
+    - web
+    - common
+    - app
 {%- endraw %}
 {%- if cookiecutter.use_celery == "y" %}
     - celery

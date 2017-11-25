@@ -1,9 +1,8 @@
+{% raw -%}
 ---
 - name: Deploy application
   hosts: webservers
-  remote_user: {{ cookiecutter.application_user }}
-
-{% raw -%}
+  remote_user: "{{ application_user }}"
   vars_files:
     - ansible_vars/base.yml
     - ansible_vars/{{ env }}.yml

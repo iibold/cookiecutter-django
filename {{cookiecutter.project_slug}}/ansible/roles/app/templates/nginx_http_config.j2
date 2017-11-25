@@ -32,5 +32,19 @@ server {
     autoindex off;
     alias {{ application_root }}/shared/media/;
   }
+
+  location /robots.txt {
+      alias  /var/local/robots.txt;
+  }
+
+  location /nginx_stub_status {
+      stub_status on;
+      access_log   off;
+      allow 127.0.0.1;
+      deny all;
+  }
+
+
+
 }
 {% endraw %}

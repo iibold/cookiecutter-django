@@ -3,16 +3,15 @@
   hosts: all
   become: yes
   become_user: root
-  remote_user: vagrant
+  remote_user: ubuntu 
   vars_files:
     - ansible_vars/base.yml
     - ansible_vars/staging.yml
-
   roles:
-    - nginx
+    - common
+    - web
     - ANXS.postgresql
-    - base
-    - application
+    - app
 {%- endraw %}
 {%- if cookiecutter.use_celery == "y" %}
     - celery

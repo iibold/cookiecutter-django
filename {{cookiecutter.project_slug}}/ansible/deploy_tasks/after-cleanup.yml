@@ -1,0 +1,21 @@
+{% raw -%}
+- name: Install dependencies in virtualenv
+  pip: virtualenv="{{ ansistrano_shared_path}}/virtualenv" 
+       requirements={{ ansistrano_release_path.stdout }}/requirements/{{ env }}.txt
+       virtualenv_python=python3.5
+
+- name: Collect statics
+  shell: "{{ ansistrano_shared_path }}/virtualenv/bin/python {{ ansistrano_release_path.stdout }}/manage.py collectstatic --noinput"
+
+- name: Run Migrations
+  shell: "{{ ansistrano_shared_path }}/virtualenv/bin/python {{ ansistrano_release_path.stdout }}/manage.py migrate --noinput"
+
+- name: Restart Application
+  raw: sudo restart {{ application_name }} || sudo start {{ application_name }}
+
+{%- endraw %}
+
+{% if cookiecutter.use_celery == "y" -%}
+- name: Restart Celery
+  raw: sudo restart celery || sudo start celery
+{%- endif %}

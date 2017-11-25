@@ -34,7 +34,7 @@ Vagrant.configure("2") do |config|
             perms:        'u=rwX:g=rD:o=rD'
         }
 
-	    node_config.vm.hostname = "{{ cookiecutter.project_slug }}" 
+        node_config.vm.hostname = "{{ cookiecutter.project_slug }}" 
         node_config.vm.box = "ubuntu/xenial64"
 
         node_config.ssh.forward_x11 = true
@@ -42,7 +42,6 @@ Vagrant.configure("2") do |config|
         config.vm.synced_folder "./", "/{{ cookiecutter.project_slug }}", type: "nfs"
         node_config.bindfs.bind_folder  "/{{ cookiecutter.project_slug }}", "/home/ubuntu/{{ cookiecutter.project_slug }}"
 
-        # it is already covered in the ansible configuration.
         #node_config.vm.provision :shell, path: "increase_swap.sh"
 
         #############################################################
@@ -52,11 +51,11 @@ Vagrant.configure("2") do |config|
         # this part can also be put into config section for all hosts?
         #############################################################
 
-        node_config.vm.provision "ansible" do |ansible|
-            ansible.playbook = "ansible/playbook.yml"
-            ansible.inventory_path = "ansible/inventories/dev"
-            ansible.limit = 'all'
-        end
+        #node_config.vm.provision "ansible" do |ansible|
+        #    ansible.playbook = "ansible/playbook.yml"
+        #    ansible.inventory_path = "ansible/inventories/dev"
+        #    ansible.limit = 'all'
+        #end
 
     end
 

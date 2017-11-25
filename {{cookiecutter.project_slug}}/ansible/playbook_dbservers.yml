@@ -11,6 +11,7 @@
     - ansible_vars/{{ env }}.yml
 
   roles:
+    - common
     - ANXS.postgresql
-    - base
+
 {%- endraw %}

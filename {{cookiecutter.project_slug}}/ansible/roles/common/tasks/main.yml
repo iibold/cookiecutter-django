@@ -2,7 +2,18 @@
 ---
 # This playbook contains common plays that will be run on all nodes.
 
-
+- name: Make sure we have a 'wheel' group 
+  group: 
+    name: wheel 
+    state: present 
+ 
+- name: Allow 'wheel' group to have passwordless sudo 
+  lineinfile: 
+    dest: /etc/sudoers 
+    state: present 
+    regexp: '^%wheel' 
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL' 
+    validate: 'visudo -cf %s' 
 
 - name: Update the source for apt
   copy:
@@ -10,8 +21,8 @@
       dest: "/etc/apt/sources.list"
   notify: update apt
 
-- name: create deply user
-  user: name=deploy group=ubuntu
+- name: create deploy user
+  user: name=deploy groups=wheel,ubuntu append=yes state=present createhome=yes
 
 - name: update apt-get
   become: yes
@@ -42,7 +53,9 @@
     - python3-pip
   tags: packages
 
-- pip: name=setuptools
+- pip: 
+    name: setuptools
+    executable: pip3
 
 - name: Set the motd
   copy: src=files/motd.txt dest=/etc/motd  # a warning to 
@@ -65,7 +78,6 @@
     dest: "~/"
     mode: "0777"
   notify: increase_swap
-  
-{%- endraw %}
 
+{%- endraw %}
 

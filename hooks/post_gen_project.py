@@ -272,6 +272,16 @@ def remove_celery_ansible_role(project_location):
 
     shutil.rmtree(celery_role_location)
 
+def check_git_private_key(project_location):
+    '''
+    check if the files are there, if not there, raise waring 
+    This private key is for access git repository
+
+    '''
+    #it cannot there, so, just issue warning
+    print "You need to generate ssh key file in {}/ansible/files/.ssh/rd_rsa".format(project_location)
+    print "then put the publick key on github or coding (git server)"
+    return 
 
 
 # IN PROGRESS
@@ -348,5 +358,5 @@ if '{{ cookiecutter.add_your_public_key }}'.lower() == 'y':
     set_personal_public_key()
 
 postgres_set_password(PROJECT_DIRECTORY)
-
 remove_not_needed_nginx_config_file(PROJECT_DIRECTORY)
+check_git_private_key(PROJECT_DIRECTORY)
